@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Middle-earth Wisdom — Quote Recommender</title>
+
+  <!--
+    FONTS
+    Cormorant Garamond: a refined serif for quotes and display text, evoking aged manuscripts.
+    Jost: a clean geometric sans-serif for UI chrome — legible, modern, unobtrusive.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─────────────────────────────────────────────
+       DESIGN TOKENS
+       Earthy, parchment-inspired palette with deep
+       forest greens and aged gold accents.
+    ───────────────────────────────────────────── */
+    :root {
+      --parchment:     #f5f0e8;
+      --parchment-mid: #ede5d0;
+      --ink:           #1e1a14;
+      --ink-muted:     #5a5040;
+      --ink-faint:     #9a8e7a;
+      --forest:        #2d4a2d;
+      --forest-light:  #3d6b3d;
+      --gold:          #8b6914;
+      --gold-light:    #c49a2a;
+      --border:        rgba(90, 80, 64, 0.2);
+      --border-strong: rgba(90, 80, 64, 0.4);
+
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans:  'Jost', system-ui, sans-serif;
+
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 14px;
+    }
+
+    /* ─────────────────────────────────────────────
+       RESET & BASE
+    ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--parchment);
+      color: var(--ink);
+      min-height: 100vh;
+      /* Subtle linen texture using CSS — no external image needed */
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(139, 105, 20, 0.03) 2px,
+          rgba(139, 105, 20, 0.03) 4px
+        );
+    }
+
+    /* ─────────────────────────────────────────────
+       LAYOUT
+    ───────────────────────────────────────────── */
+    .page {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    /* ─────────────────────────────────────────────
+       HEADER
+    ───────────────────────────────────────────── */
+    .site-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+    }
+
+    .tagline {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--ink-muted);
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+      max-width: 480px;
+    }
+
+    /* Decorative rule beneath header */
+    .rule {
+      width: 48px;
+      height: 1px;
+      background: var(--gold);
+      margin-bottom: 2.5rem;
+    }
+
+    /* ─────────────────────────────────────────────
+       INPUT SECTION
+    ───────────────────────────────────────────── */
+    .input-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 0.6rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 110px;
+      padding: 14px 16px;
+      font-family: var(--font-sans);
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      resize: vertical;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    textarea::placeholder { color: var(--ink-faint); }
+
+    textarea:focus {
+      border-color: var(--forest);
+      box-shadow: 0 0 0 3px rgba(45, 74, 45, 0.1);
+    }
+
+    /* ─────────────────────────────────────────────
+       SUBMIT BUTTON
+    ───────────────────────────────────────────── */
+    .btn {
+      margin-top: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--parchment);
+      background: var(--forest);
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn:hover  { background: var(--forest-light); }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* Arrow icon inside button */
+    .btn-arrow {
+      display: inline-block;
+      transition: transform 0.2s;
+    }
+    .btn:not(:disabled):hover .btn-arrow { transform: translateX(3px); }
+
+    /* ─────────────────────────────────────────────
+       LOADING STATE
+    ───────────────────────────────────────────── */
+    .loader {
+      display: none; /* shown via JS */
+      margin-top: 2rem;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--ink-muted);
+      letter-spacing: 0.05em;
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+
+    /* ─────────────────────────────────────────────
+       RESULTS SECTION
+    ───────────────────────────────────────────── */
+    .results {
+      display: none; /* shown via JS after API responds */
+      margin-top: 3rem;
+    }
+
+    .results-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .results-divider::before,
+    .results-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .results-divider span {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    /* ─────────────────────────────────────────────
+       QUOTE CARD
+    ───────────────────────────────────────────── */
+    .quote-card {
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.25rem;
+      /* Slide-in animation when card appears */
+      animation: slideIn 0.4s ease forwards;
+    }
+
+    .quote-card + .quote-card { animation-delay: 0.1s; }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* "Best match" vs "Runner up" badge */
+    .card-rank {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    /* The quote text itself — uses serif for gravitas */
+    .quote-text {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      font-style: italic;
+      line-height: 1.75;
+      color: var(--ink);
+      margin-bottom: 1.25rem;
+    }
+
+    /* Metadata pills row */
+    .quote-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 1rem;
+    }
+
+    .pill {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding: 3px 10px;
+      border-radius: 99px;
+      border: 1px solid transparent;
+    }
+
+    /* Character pill — forest green */
+    .pill-char  { background: rgba(45, 74, 45, 0.1); color: var(--forest); border-color: rgba(45, 74, 45, 0.2); }
+    /* Book pill — gold */
+    .pill-book  { background: rgba(139, 105, 20, 0.1); color: var(--gold); border-color: rgba(139, 105, 20, 0.2); }
+    /* Theme pill — neutral */
+    .pill-theme { background: rgba(90, 80, 64, 0.08); color: var(--ink-muted); border-color: var(--border); }
+
+    /* Why this quote was matched */
+    .quote-reason {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--ink-muted);
+      line-height: 1.7;
+      border-top: 1px solid var(--border);
+      padding-top: 0.9rem;
+    }
+
+    .quote-reason strong {
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    /* ─────────────────────────────────────────────
+       ERROR STATE
+    ───────────────────────────────────────────── */
+    .error-msg {
+      display: none; /* shown via JS */
+      margin-top: 1.5rem;
+      padding: 12px 16px;
+      background: rgba(180, 60, 40, 0.08);
+      border: 1px solid rgba(180, 60, 40, 0.2);
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      color: #8b2a1a;
+      line-height: 1.6;
+    }
+
+    /* ─────────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────────── */
+    footer {
+      margin-top: 4rem;
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--ink-faint);
+      text-align: center;
+      line-height: 1.8;
+    }
+
+  </style>
+</head>
+<body>
+
+<main class="page">
+
+  <!-- ── HEADER ───────────────────────────────── -->
+  <p class="site-label">Middle-earth Wisdom</p>
+  <h1>Find the right words<br>from the right world.</h1>
+  <p class="tagline">
+    Describe a moment, a feeling, or a situation — and we'll find
+    the Tolkien quote that speaks to it.
+  </p>
+  <div class="rule"></div>
+
+  <!-- ── INPUT ────────────────────────────────── -->
+  <label class="input-label" for="situation">Your situation</label>
+  <textarea
+    id="situation"
+    placeholder="e.g. My friend just quit a stable job to chase a risky dream. I want to encourage them without being naive about the difficulty ahead..."
+  ></textarea>
+
+  <button class="btn" id="submitBtn" onclick="findQuote()">
+    Seek wisdom <span class="btn-arrow">→</span>
+  </button>
+
+  <!-- Loading indicator -->
+  <p class="loader" id="loader">Consulting the archives of Middle-earth…</p>
+
+  <!-- Error message (shown if API call fails) -->
+  <div class="error-msg" id="errorMsg"></div>
+
+  <!-- ── RESULTS ───────────────────────────────── -->
+  <section class="results" id="results">
+    <div class="results-divider"><span>The council speaks</span></div>
+    <!-- Quote cards are injected here by renderResults() -->
+  </section>
+
+  <!-- ── FOOTER ───────────────────────────────── -->
+  <footer>
+    Quotes from <em>The Lord of the Rings</em> by J.R.R. Tolkien.<br>
+    Powered by the Claude API.
+  </footer>
+
+</main>
+
+<script>
+  /*
+   * ─────────────────────────────────────────────────────────────────────────
+   * QUOTE DATASET
+   * 50 curated quotes from the book trilogy.
+   * Each entry: uuid, text, character, book, theme.
+   * ─────────────────────────────────────────────────────────────────────────
+   */
+  const QUOTES = [
+    { "uuid": "1a2b3c4d-0001", "text": "All we have to decide is what to do with the time that is given us.", "character": "Gandalf", "book": "The Fellowship of the Ring", "theme": "courage" },
+    { "uuid": "1a2b3c4d-0002", "text": "I wish it need not have happened in my time.", "character": "Frodo", "book": "The Fellowship of the Ring", "theme": "fate" },
+    { "uuid": "1a2b3c4d-0003", "text": "Not all those who wander are lost.", "character": "Gandalf", "book": "The Fellowship of the Ring", "theme": "hope" },
+    { "uuid": "1a2b3c4d-0004", "text": "Even the smallest person can change the course of the future.", "character": "Galadriel", "book": "The Fellowship of the Ring", "theme": "courage" },
+    { "uuid": "1a2b3c4d-0005", "text": "There is some good in this world, and it's worth fighting for.", "character": "Samwise Gamgee", "book": "The Two Towers", "theme": "hope" },
+    { "uuid": "1a2b3c4d-0006", "text": "I am no man.", "character": "Éowyn", "book": "The Return of the King", "theme": "identity" },
+    { "uuid": "1a2b3c4d-0007", "text": "The world is indeed full of peril, and in it there are many dark places; but still there is much that is fair, and though in all lands love is now mingled with grief, it grows perhaps the greater.", "character": "Haldir", "book": "The Fellowship of the Ring", "theme": "hope" },
+    { "uuid": "1a2b3c4d-0008", "text": "I will not say: do not weep; for not all tears are an evil.", "character": "Gandalf", "book": "The Return of the King", "theme": "grief" },
+    { "uuid": "1a2b3c4d-0009", "text": "It's a dangerous business, Frodo, going out your door. You step onto the road, and if you don't keep your feet, there's no knowing where you might be swept off to.", "character": "Bilbo Baggins", "book": "The Fellowship of the Ring", "theme": "adventure" },
+    { "uuid": "1a2b3c4d-0010", "text": "Many that live deserve death. And some that die deserve life. Can you give it to them?", "character": "Gandalf", "book": "The Fellowship of the Ring", "theme": "mercy" },
+    { "uuid": "1a2b3c4d-0011", "text": "End? No, the journey doesn't end here. Death is just another path, one that we all must take.", "character": "Gandalf", "book": "The Return of the King", "theme": "death" },
+    { "uuid": "1a2b3c4d-0012", "text": "I am old, Gandalf. I don't look it, but I am beginning to feel it in my heart of hearts.", "character": "Bilbo Baggins", "book": "The Fellowship of the Ring", "theme": "aging" },
+    { "uuid": "1a2b3c4d-0013", "text": "Faithless is he that says farewell when the road darkens.", "character": "Gimli", "book": "The Fellowship of the Ring", "theme": "loyalty" },
+    { "uuid": "1a2b3c4d-0014", "text": "Where there's life there's hope, and need of vittles.", "character": "Samwise Gamgee", "book": "The Two Towers", "theme": "hope" },
+    { "uuid": "1a2b3c4d-0015", "text": "The burned hand teaches best. After that advice about fire goes to the heart.", "character": "Gandalf", "book": "The Two Towers", "theme": "wisdom" },
+    { "uuid": "1a2b3c4d-0016", "text": "He that breaks a thing to find out what it is has left the path of wisdom.", "character": "Gandalf", "book": "The Fellowship of the Ring", "theme": "wisdom" },
+    { "uuid": "1a2b3c4d-0017", "text": "I fear neither death nor pain.", "character": "Éowyn", "book": "The Return of the King", "theme": "courage" },
+    { "uuid": "1a2b3c4d-0018", "text": "Good morning! What do you mean? Do you wish me a good morning, or mean that it is a good morning whether I want it or not?", "character": "Gandalf", "book": "The Fellowship of the Ring", "theme": "humor" },
+    { "uuid": "1a2b3c4d-0019", "text": "Certainty of death. Small chance of success. What are we waiting for?", "character": "Gimli", "book": "The Return of the King", "theme": "courage" },
+    { "uuid": "1a2b3c4d-0020", "text": "In sorrow we must go, but not in despair. Behold! we are not bound for ever to the circles of the world, and beyond them is more than memory.", "character": "Aragorn", "book": "The Return of the King", "theme": "grief" },
+    { "uuid": "1a2b3c4d-0021", "text": "It is not our part to master all the tides of the world, but to do what is in us for the succour of those years wherein we are set, uprooting the evil in the fields that we know, so that those who live after may have clean earth to till. What weather they shall have is not ours to rule.", "character": "Gandalf", "book": "The Return of the King", "theme": "duty" },
+    { "uuid": "1a2b3c4d-0022", "text": "There is nothing like looking, if you want to find something. You certainly usually find something, if you look, but it is not always quite the something you were after.", "character": "Bilbo Baggins", "book": "The Fellowship of the Ring", "theme": "wisdom" },
+    { "uuid": "1a2b3c4d-0023", "text": "The treacherous are ever distrustful.", "character": "Gandalf", "book": "The Two Towers", "theme": "treachery" },
+    { "uuid": "1a2b3c4d-0024", "text": "War must be, while we defend our lives against a destroyer who would devour all; but I do not love the bright sword for its sharpness, nor the arrow for its swiftness, nor the warrior for his glory.", "character": "Faramir", "book": "The Two Towers", "theme": "war" },
+    { "uuid": "1a2b3c4d-0025", "text": "I would rather share one lifetime with you than face all the ages of this world alone.", "character": "Arwen", "book": "The Fellowship of the Ring", "theme": "love" },
+    { "uuid": "1a2b3c4d-0026", "text": "The wise speak only of what they know.", "character": "Gandalf", "book": "The Two Towers", "theme": "wisdom" },
+    { "uuid": "1a2b3c4d-0027", "text": "It is not the strength of the body that counts, but the strength of the spirit.", "character": "Gandalf", "book": "The Return of the King", "theme": "perseverance" },
+    { "uuid": "1a2b3c4d-0028", "text": "Deserves it! I daresay he does. Many that live deserve death. And some die that deserve life.", "character": "Gandalf", "book": "The Fellowship of the Ring", "theme": "mercy" },
+    { "uuid": "1a2b3c4d-0029", "text": "The praise of the praiseworthy is above all rewards.", "character": "Faramir", "book": "The Two Towers", "theme": "honor" },
+    { "uuid": "1a2b3c4d-0030", "text": "I am in fact a Hobbit in all but size.", "character": "Bilbo Baggins", "book": "The Fellowship of the Ring", "theme": "identity" },
+    { "uuid": "1a2b3c4d-0031", "text": "Many are my names in many countries. Mithrandir among the Elves, Tharkûn to the Dwarves; Olórin I was in my youth in the West that is forgotten, in the South Incánus, in the North Gandalf; to the East I go not.", "character": "Gandalf", "book": "The Two Towers", "theme": "identity" },
+    { "uuid": "1a2b3c4d-0032", "text": "The road must be trod, but it will be very hard. And neither strength nor wisdom will carry us far upon it. This quest may be attempted by the weak with as much hope as the strong.", "character": "Elrond", "book": "The Fellowship of the Ring", "theme": "courage" },
+    { "uuid": "1a2b3c4d-0033", "text": "I sit beside the fire and think of all that I have seen, of meadow-flowers and butterflies in summers that have been.", "character": "Bilbo Baggins", "book": "The Fellowship of the Ring", "theme": "memory" },
+    { "uuid": "1a2b3c4d-0034", "text": "We set out to save the Shire, Sam, and it has been saved, but not for me.", "character": "Frodo", "book": "The Return of the King", "theme": "sacrifice" },
+    { "uuid": "1a2b3c4d-0035", "text": "I will not say the day is done, nor bid the stars farewell.", "character": "Samwise Gamgee", "book": "The Return of the King", "theme": "perseverance" },
+    { "uuid": "1a2b3c4d-0036", "text": "There is a seed of courage hidden in the heart of the fattest and most timid hobbit, waiting for some final and desperate danger to make it grow.", "character": "Tolkien", "book": "The Fellowship of the Ring", "theme": "courage" },
+    { "uuid": "1a2b3c4d-0037", "text": "I don't know half of you half as well as I should like, and I like less than half of you half as well as you deserve.", "character": "Bilbo Baggins", "book": "The Fellowship of the Ring", "theme": "humor" },
+    { "uuid": "1a2b3c4d-0038", "text": "He used often to say there was only one Road; that it was like a great river: its springs were at every doorstep, and every path was its tributary.", "character": "Frodo", "book": "The Fellowship of the Ring", "theme": "adventure" },
+    { "uuid": "1a2b3c4d-0039", "text": "I am glad you are here with me. Here at the end of all things, Sam.", "character": "Frodo", "book": "The Return of the King", "theme": "friendship" },
+    { "uuid": "1a2b3c4d-0040", "text": "Even darkness must pass. A new day will come. And when the sun shines it will shine out the clearer.", "character": "Samwise Gamgee", "book": "The Two Towers", "theme": "hope" },
+    { "uuid": "1a2b3c4d-0041", "text": "Oft hope is born when all is forlorn.", "character": "Legolas", "book": "The Return of the King", "theme": "hope" },
+    { "uuid": "1a2b3c4d-0042", "text": "Where will wants not, a way opens.", "character": "Éowyn", "book": "The Return of the King", "theme": "perseverance" },
+    { "uuid": "1a2b3c4d-0043", "text": "The counsel of Gandalf was not founded on foreknowledge of safety, for himself or for others.", "character": "Tolkien", "book": "The Fellowship of the Ring", "theme": "wisdom" },
+    { "uuid": "1a2b3c4d-0044", "text": "I am not made for perilous quests. I wish I had never seen the Ring! Why did it come to me? Why was I chosen?", "character": "Frodo", "book": "The Fellowship of the Ring", "theme": "fate" },
+    { "uuid": "1a2b3c4d-0045", "text": "There is no real going back. Though I may come to the Shire, it will not seem the same; for I shall not be the same.", "character": "Frodo", "book": "The Fellowship of the Ring", "theme": "change" },
+    { "uuid": "1a2b3c4d-0046", "text": "I am old, very old. So old that I almost feel it.", "character": "Treebeard", "book": "The Two Towers", "theme": "aging" },
+    { "uuid": "1a2b3c4d-0047", "text": "One cannot be always tearing towards the future; one sometimes needs to rest and think about the past.", "character": "Treebeard", "book": "The Two Towers", "theme": "wisdom" },
+    { "uuid": "1a2b3c4d-0048", "text": "It is useless to meet revenge with revenge: it will heal nothing.", "character": "Frodo", "book": "The Return of the King", "theme": "mercy" },
+    { "uuid": "1a2b3c4d-0049", "text": "I have passed through fire and deep water, since we parted. I have forgotten much that I thought I knew.", "character": "Gandalf", "book": "The Two Towers", "theme": "change" },
+    { "uuid": "1a2b3c4d-0050", "text": "Courage is found in unlikely places.", "character": "Gildor", "book": "The Fellowship of the Ring", "theme": "courage" }
+  ];
+
+  /*
+   * ─────────────────────────────────────────────────────────────────────────
+   * findQuote()
+   * Main entry point. Triggered by the "Seek wisdom" button.
+   * 1. Reads the user's situation from the textarea.
+   * 2. Shows the loading state.
+   * 3. Calls the Claude API with the quotes as context.
+   * 4. Renders the response as quote cards.
+   * ─────────────────────────────────────────────────────────────────────────
+   */
+  async function findQuote() {
+
+    const situation = document.getElementById('situation').value.trim();
+
+    // Guard: don't fire if the textarea is empty
+    if (!situation) {
+      document.getElementById('situation').focus();
+      return;
+    }
+
+    // ── UI: enter loading state ──────────────────
+    setLoading(true);
+    clearResults();
+
+    try {
+      /*
+       * Build the prompt.
+       * We pass Claude the full quote dataset as a JSON string so it can
+       * reason over all 50 quotes and pick the best matches.
+       * We ask for a structured JSON response so we can parse it reliably.
+       */
+
+      /*
+       * POST the user's situation and the full quote dataset to the Vercel
+       * serverless function. The backend handles the Anthropic API call
+       * using a secret key — the key is never exposed in this file.
+       *
+       * Replace BACKEND_URL with your Vercel deployment URL after deploying.
+       */
+      const BACKEND_URL = 'https://lotr-backend.vercel.app/api/recommend';
+
+      const response = await fetch(BACKEND_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ situation, quotes: QUOTES })
+      });
+
+      if (!response.ok) {
+        const err = await response.text();
+        throw new Error(`API error ${response.status}: ${err}`);
+      }
+
+      const json = await response.json();
+
+      // The backend returns { recommendations: [{uuid, reason}, {uuid, reason}] }
+      const recommendations = json.recommendations;
+
+      // Render the results
+      renderResults(recommendations);
+
+    } catch (err) {
+      showError(`Something went wrong in the archives: ${err.message}. Please try again.`);
+      console.error('Quote finder error:', err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  /*
+   * ─────────────────────────────────────────────────────────────────────────
+   * renderResults(recommendations)
+   * Takes the array of {uuid, reason} objects returned by Claude,
+   * looks up the full quote data from our dataset, and builds the HTML cards.
+   * ─────────────────────────────────────────────────────────────────────────
+   */
+  function renderResults(recommendations) {
+    const resultsEl = document.getElementById('results');
+    const rankLabels = ['Best match', 'Runner up'];
+
+    // Build a lookup map from uuid → quote object for O(1) access
+    const quoteMap = Object.fromEntries(QUOTES.map(q => [q.uuid, q]));
+
+    let html = '';
+
+    recommendations.forEach((rec, index) => {
+      const quote = quoteMap[rec.uuid];
+
+      // Safety check: skip if uuid wasn't found in the dataset
+      if (!quote) return;
+
+      html += `
+        <div class="quote-card">
+          <p class="card-rank">${rankLabels[index] || 'Match'}</p>
+          <p class="quote-text">"${escapeHtml(quote.text)}"</p>
+          <div class="quote-meta">
+            <span class="pill pill-char">${escapeHtml(quote.character)}</span>
+            <span class="pill pill-book">${escapeHtml(quote.book)}</span>
+            <span class="pill pill-theme">${escapeHtml(quote.theme)}</span>
+          </div>
+          <p class="quote-reason"><strong>Why this quote:</strong> ${escapeHtml(rec.reason)}</p>
+        </div>
+      `;
+    });
+
+    // Inject the cards and reveal the results section
+    resultsEl.innerHTML = `
+      <div class="results-divider"><span>The council speaks</span></div>
+      ${html}
+
+    `;
+    resultsEl.style.display = 'block';
+
+    // Smoothly scroll the results into view
+    resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /*
+   * ─────────────────────────────────────────────────────────────────────────
+   * UI HELPERS
+   * Small utility functions for managing loading state, errors, and clearing.
+   * ─────────────────────────────────────────────────────────────────────────
+   */
+
+  function setLoading(isLoading) {
+    document.getElementById('loader').style.display  = isLoading ? 'block' : 'none';
+    document.getElementById('submitBtn').disabled    = isLoading;
+  }
+
+  function clearResults() {
+    const resultsEl = document.getElementById('results');
+    resultsEl.style.display = 'none';
+    resultsEl.innerHTML = '';
+    document.getElementById('errorMsg').style.display = 'none';
+  }
+
+  function showError(message) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = message;
+    el.style.display = 'block';
+  }
+
+
+
+  /*
+   * escapeHtml(str)
+   * Prevents XSS by escaping HTML special characters before injecting
+   * any string into innerHTML. Always escape user-facing or API-sourced text.
+   */
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  /*
+   * ─────────────────────────────────────────────────────────────────────────
+   * KEYBOARD SHORTCUT
+   * Allow Cmd+Enter / Ctrl+Enter to submit from the textarea,
+   * matching the UX convention of AI chat interfaces.
+   * ─────────────────────────────────────────────────────────────────────────
+   */
+  document.getElementById('situation').addEventListener('keydown', function(e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+      findQuote();
+    }
+  });
+</script>
+
+</body>
+</html>
