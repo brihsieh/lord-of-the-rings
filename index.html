@@ -343,7 +343,7 @@
 
   <!-- ── HEADER ───────────────────────────────── -->
   <p class="site-label">Middle-earth Wisdom</p>
-  <h1>Find the right words<br>from the right world.</h1>
+  <h1>If J.R.R. Tolkien said<br>"Hold my ale"</h1>
   <p class="tagline">
     Describe a moment, a feeling, or a situation — and we'll find
     the Tolkien quote that speaks to it.
@@ -354,7 +354,7 @@
   <label class="input-label" for="situation">Your situation</label>
   <textarea
     id="situation"
-    placeholder="e.g. My friend just quit a stable job to chase a risky dream. I want to encourage them without being naive about the difficulty ahead..."
+    placeholder=""If life gives you lemons, make lemonade", but make it Middle-earth"
   ></textarea>
 
   <button class="btn" id="submitBtn" onclick="findQuote()">
@@ -376,7 +376,7 @@
   <!-- ── FOOTER ───────────────────────────────── -->
   <footer>
     Quotes from <em>The Lord of the Rings</em> by J.R.R. Tolkien.<br>
-    Powered by the Claude API.
+    Powered by the Gemini API.
   </footer>
 
 </main>
@@ -481,7 +481,7 @@
        *
        * Replace BACKEND_URL with your Vercel deployment URL after deploying.
        */
-      const BACKEND_URL = 'https://lotr-backend.vercel.app/api/recommend';
+      const BACKEND_URL = 'https://YOUR-PROJECT.vercel.app/api/recommend';
 
       const response = await fetch(BACKEND_URL, {
         method: 'POST',
