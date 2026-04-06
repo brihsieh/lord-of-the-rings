@@ -346,6 +346,92 @@
       line-height: 1.8;
     }
 
+
+    /* ─────────────────────────────────────────────
+       ABOUT ME CARD
+    ───────────────────────────────────────────── */
+    .about-card {
+      margin-top: 2.5rem;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+    }
+
+    .about-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .about-name {
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.3rem;
+    }
+
+    .about-title {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--ink-muted);
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .about-bio {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .about-quote {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      font-style: italic;
+      line-height: 1.75;
+      color: var(--ink-muted);
+      border-left: 2px solid var(--gold);
+      padding-left: 1rem;
+      margin: 0 0 1.5rem;
+    }
+
+    .about-quote-attr {
+      display: block;
+      margin-top: 0.4rem;
+      font-size: 13px;
+      font-style: normal;
+      color: var(--ink-faint);
+    }
+
+    .about-links {
+      display: flex;
+      gap: 10px;
+    }
+
+    .about-btn {
+      display: inline-block;
+      padding: 9px 20px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--parchment);
+      background: var(--forest);
+      border-radius: var(--radius-sm);
+      transition: background 0.2s;
+    }
+
+    .about-btn:hover { background: var(--forest-light); }
+
   </style>
 </head>
 <body>
@@ -382,6 +468,19 @@
   <section class="results" id="results">
     <div class="results-divider"><span>The council speaks</span></div>
     <!-- Quote cards are injected here by renderResults() -->
+  </section>
+
+  <!-- ── ABOUT ME ─────────────────────────────── -->
+  <section class="about-card">
+    <p class="about-label">About Me</p>
+    <h2 class="about-name">Brian Hsieh</h2>
+    <p class="about-title">Product Leader | Data &amp; Analytics PM | Epic Games · WB Games · McKinsey</p>
+    <p class="about-bio">A decade in consulting and seven years in the gaming industry have equipped me with deep expertise in end-to-end product delivery, development management, and timely Lord of the Rings quotes:</p>
+    <blockquote class="about-quote">"It is not our part to master all the tides of the world, but to do what is in us for the succour of those years wherein we are set, uprooting the evil in the fields that we know, so that those who live after may have clean earth to till. What weather they shall have is not ours to rule." <span class="about-quote-attr">— J.R.R. Tolkien</span></blockquote>
+    <div class="about-links">
+      <a class="about-btn" href="https://www.linkedin.com/in/brihsieh/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="about-btn" href="https://drive.google.com/file/d/1_2soIrbyF4iKIJo3xBiDBv5a-LpHfkil/" target="_blank" rel="noopener">Portfolio</a>
+    </div>
   </section>
 
   <!-- ── FOOTER ───────────────────────────────── -->
