@@ -70,7 +70,6 @@
       background-color: rgba(245, 240, 232, 0.93);
       border-radius: 12px;
       box-shadow: 0 8px 40px rgba(30, 26, 20, 0.25);
-      min-height: calc(100vh - 4rem);
     }
 
     @media (max-width: 768px) {
@@ -78,7 +77,6 @@
         width: 90%;
         margin: 1rem auto;
         padding: 2rem 1.25rem 4rem;
-        min-height: calc(100vh - 2rem);
       }
     }
 
@@ -350,9 +348,17 @@
     /* ─────────────────────────────────────────────
        ABOUT ME CARD
     ───────────────────────────────────────────── */
+    .about-wrap {
+      width: 50%;
+      margin: 1.5rem auto 0;
+    }
+
+    @media (max-width: 768px) {
+      .about-wrap { width: 90%; }
+    }
+
     .about-card {
-      margin-top: 2.5rem;
-      background: rgba(255, 255, 255, 0.55);
+      background: rgba(245, 240, 232, 0.93);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 1.75rem;
@@ -470,7 +476,16 @@
     <!-- Quote cards are injected here by renderResults() -->
   </section>
 
-  <!-- ── ABOUT ME ─────────────────────────────── -->
+  <!-- ── FOOTER ─────────────────────────────────── -->
+  <footer>
+    Quotes from <em>The Lord of the Rings</em> by J.R.R. Tolkien.<br>
+    Powered by the Gemini API.
+  </footer>
+
+</main>
+
+<!-- ── ABOUT ME: separate card below, gap reveals background image ── -->
+<div class="about-wrap">
   <section class="about-card">
     <p class="about-label">About Me</p>
     <h2 class="about-name">Brian Hsieh</h2>
@@ -482,14 +497,7 @@
       <a class="about-btn" href="https://drive.google.com/file/d/1_2soIrbyF4iKIJo3xBiDBv5a-LpHfkil/" target="_blank" rel="noopener">Portfolio</a>
     </div>
   </section>
-
-  <!-- ── FOOTER ───────────────────────────────── -->
-  <footer>
-    Quotes from <em>The Lord of the Rings</em> by J.R.R. Tolkien.<br>
-    Powered by the Gemini API.
-  </footer>
-
-</main>
+</div>
 
 <script>
   /*
