@@ -439,6 +439,193 @@
 
     .about-btn:hover { background: var(--forest-light); }
 
+    /* ─────────────────────────────────────────────
+       RESUME
+       Parchment-themed card that sits inside the About card,
+       with a gold bar of One Ring inscription along the top.
+    ───────────────────────────────────────────── */
+    .resume {
+      position: relative;
+      margin: 0 0 1.5rem;
+      /* top padding = height of the gold bar (28px) + breathing room */
+      padding: calc(28px + 1.5rem) 1.5rem 0.5rem;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      color: var(--ink);
+      overflow: hidden; /* clips the bar to the card's rounded corners */
+    }
+
+    /* Gold bar tiled with the One Ring inscription */
+    .resume::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 28px;
+      background-color: var(--gold-light);
+      background-image: url('one_ring_inscription_tile.png');
+      background-repeat: repeat-x;   /* tile side by side across the full width */
+      background-size: auto 100%;    /* each tile fits the bar's height */
+      background-position: left center;
+    }
+
+    /* 1 · Stats banner */
+    .resume-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+
+    .resume-stat {
+      padding: 1rem 0 0.9rem 1.1rem;
+      border-left: 1px solid var(--border);
+    }
+    .resume-stat:first-child { border-left: none; padding-left: 0.5rem; }
+
+    .resume-stat-num {
+      font-family: var(--font-serif);
+      font-variant-numeric: lining-nums;
+      font-size: clamp(2.8rem, 7vw, 4rem);
+      font-weight: 500;
+      line-height: 1;
+      color: var(--forest);
+    }
+
+    .resume-stat-label {
+      margin-top: 0.45rem;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    /* 2 · Summary paragraph */
+    .resume-summary {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--ink);
+      margin-bottom: 1.75rem;
+    }
+
+    /* Section labels (Experience / Education / Skills) */
+    .resume-section-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--forest);
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0.35rem;
+    }
+
+    .resume-section { margin-bottom: 1.75rem; }
+
+    /* 3 & 4 · Experience / Education rows */
+    .resume-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 0.85rem 0;
+    }
+
+    /* Logo thumbnail — real images in /logos replace the placeholders (see script at bottom) */
+    .logo {
+      flex: 0 0 48px;
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin-top: 2px;
+    }
+    .logo img { width: 100%; height: 100%; object-fit: contain; display: none; }
+    .logo-fallback {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: #fff;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--logo-bg, #444);
+    }
+
+    .resume-item-body { flex: 1; min-width: 0; }
+
+    .resume-company {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--ink);
+      line-height: 1.25;
+      margin-bottom: 0.15rem;
+    }
+
+    .resume-role-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.5;
+      color: var(--ink);
+      margin-top: 0.15rem;
+    }
+
+    .resume-role-row + .resume-role-row {
+      margin-top: 0.55rem;
+      padding-top: 0.55rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .resume-dates {
+      flex: 0 0 auto;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--ink-faint);
+      white-space: nowrap;
+    }
+
+    /* 5 · Skill pills */
+    .resume-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 0.9rem;
+    }
+
+    .resume-skill {
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 13px;
+      border-radius: 99px;
+      background: rgba(90, 80, 64, 0.08);
+      color: var(--ink-muted);
+      border: 1px solid var(--border);
+    }
+
+    @media (max-width: 768px) {
+      .resume { padding: calc(28px + 1.25rem) 1rem 0.25rem; }
+      .resume-role-row { flex-direction: column; gap: 2px; }
+      .resume-stat { padding-left: 0.75rem; }
+    }
+
   </style>
 </head>
 <body>
@@ -493,7 +680,132 @@
     <p class="about-title">Product Leader | Platform &amp; Data PM | Epic Games · WB Games · McKinsey</p>
     <p class="about-bio">A decade in consulting and seven years in the gaming industry have equipped me with deep expertise in end-to-end product delivery, development management, and timely Lord of the Rings quotes:</p>
     <blockquote class="about-quote">"It is not our part to master all the tides of the world, but to do what is in us for the succour of those years wherein we are set, uprooting the evil in the fields that we know, so that those who live after may have clean earth to till. What weather they shall have is not ours to rule." <span class="about-quote-attr">— J.R.R. Tolkien</span></blockquote>
-    <div class="about-links">
+    <!-- ── RESUME ─────────────────────────────── -->
+    <p class="about-label">Resume</p>
+    <div class="resume">
+
+      <!-- 1 · Stats banner -->
+      <div class="resume-stats">
+        <div class="resume-stat"><div class="resume-stat-num">21</div><div class="resume-stat-label">Years of Experience</div></div>
+        <div class="resume-stat"><div class="resume-stat-num">10</div><div class="resume-stat-label">Roles</div></div>
+        <div class="resume-stat"><div class="resume-stat-num">17</div><div class="resume-stat-label">Skills</div></div>
+      </div>
+
+      <!-- 2 · Summary -->
+      <p class="resume-summary">Experienced product leader specializing in platform, live services, and data analytics with deep expertise in gaming industry. Led cross-functional teams shipping AAA titles and developer tools, driving millions in revenue through marketplace platforms and analytics insights.</p>
+
+      <!-- 3 · Experience
+           Logo thumbnails: drop PNG/SVG/WebP files into a /logos folder using the
+           filenames below and they replace the colored placeholders automatically. -->
+      <div class="resume-section">
+        <p class="resume-section-label">Experience</p>
+        <div class="resume-item">
+          <span class="logo"><img src="logos/epic-games.png" alt="Epic Games logo"><span class="logo-fallback" style="--logo-bg:#1b0b4a">EG</span></span>
+          <div class="resume-item-body">
+            <div class="resume-company">Epic Games</div>
+            <div class="resume-role-row"><span>Lead, Unreal Creative Infrastructure</span><span class="resume-dates">2025 – Present</span></div>
+          </div>
+        </div>
+        <div class="resume-item">
+          <span class="logo"><img src="logos/amihan-entertainment.png" alt="Amihan Entertainment logo"><span class="logo-fallback" style="--logo-bg:#2f8f6b">AE</span></span>
+          <div class="resume-item-body">
+            <div class="resume-company">Amihan Entertainment</div>
+            <div class="resume-role-row"><span>Lead Product Manager</span><span class="resume-dates">2024 – 2025</span></div>
+          </div>
+        </div>
+        <div class="resume-item">
+          <span class="logo"><img src="logos/wb-games.png" alt="WB Games logo"><span class="logo-fallback" style="--logo-bg:#0a4fa8">WB</span></span>
+          <div class="resume-item-body">
+            <div class="resume-company">WB Games</div>
+            <div class="resume-role-row"><span>Senior Product Manager, Game Analytics &amp; Insights</span><span class="resume-dates">2021 – 2024</span></div>
+          </div>
+        </div>
+        <div class="resume-item">
+          <span class="logo"><img src="logos/imbellus.png" alt="Imbellus logo"><span class="logo-fallback" style="--logo-bg:#d9822b">IM</span></span>
+          <div class="resume-item-body">
+            <div class="resume-company">Imbellus</div>
+            <div class="resume-role-row"><span>Technical Product Manager</span><span class="resume-dates">2019 – 2020</span></div>
+          </div>
+        </div>
+        <div class="resume-item">
+          <span class="logo"><img src="logos/ncsoft.png" alt="NCSOFT logo"><span class="logo-fallback" style="--logo-bg:#1c2f5e">NC</span></span>
+          <div class="resume-item-body">
+            <div class="resume-company">NCSOFT</div>
+            <div class="resume-role-row"><span>Sr Technical Program Manager, Platform &amp; Live Services</span><span class="resume-dates">2018 – 2019</span></div>
+          </div>
+        </div>
+        <div class="resume-item">
+          <span class="logo"><img src="logos/mckinsey.png" alt="McKinsey &amp; Company logo"><span class="logo-fallback" style="--logo-bg:#0b2a6f">McK</span></span>
+          <div class="resume-item-body">
+            <div class="resume-company">McKinsey &amp; Company</div>
+            <div class="resume-role-row"><span>Digital Specialist</span><span class="resume-dates">2016 – 2017</span></div>
+            <div class="resume-role-row"><span>IT Intern, IT Business Analyst</span><span class="resume-dates">2008 – 2010</span></div>
+          </div>
+        </div>
+        <div class="resume-item">
+          <span class="logo"><img src="logos/accenture-digital.png" alt="Accenture Digital logo"><span class="logo-fallback" style="--logo-bg:#a100ff">A&gt;</span></span>
+          <div class="resume-item-body">
+            <div class="resume-company">Accenture Digital</div>
+            <div class="resume-role-row"><span>Manager</span><span class="resume-dates">2015 – 2016</span></div>
+            <div class="resume-role-row"><span>Consultant</span><span class="resume-dates">2011 – 2015</span></div>
+            <div class="resume-role-row"><span>Analyst</span><span class="resume-dates">2010 – 2011</span></div>
+          </div>
+        </div>
+        <div class="resume-item">
+          <span class="logo"><img src="logos/ecvision.png" alt="ecVision logo"><span class="logo-fallback" style="--logo-bg:#3a6ea5">ec</span></span>
+          <div class="resume-item-body">
+            <div class="resume-company">ecVision</div>
+            <div class="resume-role-row"><span>Software Engineering Intern</span><span class="resume-dates">2007 – 2007</span></div>
+          </div>
+        </div>
+        <div class="resume-item">
+          <span class="logo"><img src="logos/mks-instruments.png" alt="MKS Instruments logo"><span class="logo-fallback" style="--logo-bg:#1d5fa6">mks</span></span>
+          <div class="resume-item-body">
+            <div class="resume-company">MKS Instruments</div>
+            <div class="resume-role-row"><span>QA Intern, Engineering Lab Intern</span><span class="resume-dates">2005 – 2006</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 · Education -->
+      <div class="resume-section">
+        <p class="resume-section-label">Education</p>
+        <div class="resume-item">
+          <span class="logo"><img src="logos/columbia-university.png" alt="Columbia University logo"><span class="logo-fallback" style="--logo-bg:#1d3f8f">CU</span></span>
+          <div class="resume-item-body">
+            <div class="resume-company">Columbia University</div>
+            <div class="resume-role-row"><span>Bachelor of Science, Computer Engineering</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 · Skills -->
+      <div class="resume-section">
+        <p class="resume-section-label">Skills</p>
+        <div class="resume-skills">
+        <span class="resume-skill">Product Roadmapping</span>
+        <span class="resume-skill">Platform &amp; Live Services</span>
+        <span class="resume-skill">Data &amp; Analytics</span>
+        <span class="resume-skill">Live Ops &amp; Production</span>
+        <span class="resume-skill">Marketplace, Commerce</span>
+        <span class="resume-skill">Consulting &amp; Strategy</span>
+        <span class="resume-skill">Looker</span>
+        <span class="resume-skill">Tableau</span>
+        <span class="resume-skill">SQL</span>
+        <span class="resume-skill">Jira</span>
+        <span class="resume-skill">Claude Code</span>
+        <span class="resume-skill">GitHub</span>
+        <span class="resume-skill">Java</span>
+        <span class="resume-skill">Obj-C</span>
+        <span class="resume-skill">C#</span>
+        <span class="resume-skill">LLM</span>
+        <span class="resume-skill">Fluent in Mandarin</span>
+        </div>
+      </div>
+
+    </div>
+
+        <div class="about-links">
       <a class="about-btn" href="https://www.linkedin.com/in/brihsieh/" target="_blank" rel="noopener">LinkedIn</a>
       <a class="about-btn" href="https://drive.google.com/file/d/1_2soIrbyF4iKIJo3xBiDBv5a-LpHfkil/" target="_blank" rel="noopener">Portfolio</a>
     </div>
@@ -736,6 +1048,15 @@
     if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
       findQuote();
     }
+  });
+</script>
+
+<script>
+  /* Resume logos: show a real image from /logos if it exists; otherwise the colored initials placeholder stays. */
+  document.querySelectorAll('.logo img').forEach(img => {
+    const showImg = () => { img.style.display = 'block'; img.nextElementSibling.style.display = 'none'; };
+    img.addEventListener('load', showImg);
+    if (img.complete && img.naturalWidth > 0) showImg();
   });
 </script>
 
